@@ -1,12 +1,6 @@
 import React from "react";
 import { initGlobalContext } from "./GlobalContext";
-import {
-  AppFilter,
-  DateFilter,
-  IFiltersData,
-  ListFilter,
-  StringFilter,
-} from "../../UIKit/Filters/FiltersTypes";
+import { AppFilter, DateFilter, IFiltersData, ListFilter, StringFilter } from "../../UIKit/Filters/FiltersTypes";
 
 /** Данные формы отбора обращения */
 export class SelectRequestData {
@@ -18,6 +12,8 @@ export class SelectRequestData {
   onClickSearch: () => Promise<void>;
   /** Количество отобранных элементов */
   elementsCount: number;
+  /** Идентификаторы выбранных элементов */
+  selectedItemsIds: string[];
 
   constructor() {
     this.filters = new SelectRequestFilters();
@@ -26,6 +22,7 @@ export class SelectRequestData {
       alert("test");
     };
     this.elementsCount = 0;
+    this.selectedItemsIds = [];
   }
 }
 
@@ -109,6 +106,4 @@ export class SelectRequestFilters implements IFiltersData {
   }
 }
 
-export const selectRequestContext = initGlobalContext<SelectRequestData>(
-  new SelectRequestData()
-);
+export const selectRequestContext = initGlobalContext<SelectRequestData>(new SelectRequestData());
