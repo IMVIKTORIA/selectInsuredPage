@@ -228,6 +228,10 @@ async function assignInsuredList(contractorsIds: string[]) {
   // TODO: Просто присвоить в сам объект новых застрахованных
 }
 
+async function OnInit(): Promise<void> {
+  await randomDelay();
+}
+
 export default {
   getAppeals,
   getRequestsCount,
@@ -247,4 +251,5 @@ export default {
   setContractInsured,
   assignInsured,
   assignInsuredList,
+  OnInit,
 };
