@@ -60,7 +60,7 @@ export default function SelectRequestForm() {
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
 
   // Подгрузка данных
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     Scripts.OnInit().then(() => {
       // Данные формы из черновика
       let filtersData: SelectRequestData = new SelectRequestData();
