@@ -124,6 +124,11 @@ function getRequestPageCode(): string {
   return Context.data.request_page_path ?? "";
 }
 
+/** Получение кода страницы Контрагента */
+function getContractorPageCode(): string {
+  return Context.data.contractor_page_path ?? "";
+}
+
 /**
  * Установить застрахованного в фильтр (Из оригинальных скриптов)
  */
@@ -236,6 +241,8 @@ export default {
   getTreatyPageCode,
   getSelectTaskPageCode,
   getRequestPageCode,
+  getContractorPageCode,
+
   setFilterInsured,
   setContractInsured,
   assignInsured,
