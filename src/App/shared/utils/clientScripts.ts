@@ -41,6 +41,8 @@ async function getAppeals(
     telephone: new ItemData({ value: "+7 912 345 67 89", info: "test" }),
     email: new ItemData({ value: "test@test.com", info: "test" }),
     gender: new ItemData({ value: "муж", info: "test" }),
+    contract: new ItemData({ value: "aaaaa", info: "test" }),
+    insurer: new ItemData({ value: "yyyyy", info: "test" }),
   };
   return {
     items: Array(5)

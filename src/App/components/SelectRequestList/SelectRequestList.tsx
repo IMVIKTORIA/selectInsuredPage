@@ -124,6 +124,18 @@ export default function SelectRequestList({ width }: SelectRequestListProps) {
       fr: 1,
       isSortable: searchAccess,
     }),
+    new ListColumnData({
+      name: data.filters.insurer.fieldName,
+      code: data.filters.insurer.fieldCode,
+      fr: 1,
+      isSortable: searchAccess,
+    }),
+    new ListColumnData({
+      name: data.filters.contract.fieldName,
+      code: data.filters.contract.fieldCode,
+      fr: 1,
+      isSortable: searchAccess,
+    }),
   ];
 
   return (

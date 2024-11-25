@@ -49,6 +49,10 @@ export class SelectRequestFiltersStates {
   telephone: boolean;
   /** Email */
   email: boolean;
+  /** Страхователь */
+  insurer: boolean;
+  /** Договор */
+  contract: boolean;
 
   constructor() {
     this.number = false;
@@ -60,6 +64,8 @@ export class SelectRequestFiltersStates {
     this.birthDate = false;
     this.startDate = false;
     this.endDate = false;
+    this.contract = false;
+    this.insurer = false;
   }
 }
 
@@ -83,6 +89,10 @@ export class SelectRequestFilters implements IFiltersData {
   numberPolicy: StringFilter;
   /** Продукт */
   product: StringFilter;
+   /** Страхователь */
+  insurer: StringFilter;
+  /** Договор */
+  contract: StringFilter;
 
   constructor() {
     this.number = new StringFilter("number", "полное наименование");
@@ -94,6 +104,8 @@ export class SelectRequestFilters implements IFiltersData {
     this.product = new StringFilter("product", "продукт");
     this.telephone = new StringFilter("telephone", "телефон");
     this.email = new StringFilter("email", "email");
+    this.insurer = new StringFilter("insurer", "страхователь");
+    this.contract = new StringFilter("contract", "договор");
   }
 
   reset() {
@@ -106,6 +118,8 @@ export class SelectRequestFilters implements IFiltersData {
     this.product.reset();
     this.telephone.reset();
     this.email.reset();
+    this.insurer.reset();
+    this.contract.reset();
   }
 }
 

@@ -15,6 +15,8 @@ export class SelectRequestData {
   product?: ItemData;
   telephone?: ItemData;
   email?: ItemData;
+  contract?: ItemData;
+  insurer?: ItemData;
   // Дата создания - дата с по
   birthDate?: ItemDataString;
   startDate?: ItemDataString;
@@ -32,6 +34,8 @@ export class SelectRequestData {
     gender,
     numberPolicy,
     product,
+    contract,
+    insurer,
   }: SelectRequestData) {
     this.number = number;
     this.numberPolicy = numberPolicy;
@@ -42,5 +46,7 @@ export class SelectRequestData {
     this.endDate = endDate;
     this.birthDate = birthDate;
     this.gender = gender;
+    this.contract = contract;
+    this.insurer = insurer;
   }
 }
