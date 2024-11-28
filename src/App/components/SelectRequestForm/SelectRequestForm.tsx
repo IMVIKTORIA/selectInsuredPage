@@ -2,11 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   selectRequestContext,
   SelectRequestData,
+  SelectRequestFilters,
 } from "../../stores/SelectRequestContext";
 import Header from "../Header/Header";
 import SelectRequestFiltersForm from "../SelectRequestFiltersForm/SelectRequestFiltersForm";
 import SelectRequestList from "../SelectRequestList/SelectRequestList";
-import { getDataFromDraft } from "../../shared/utils/utils";
+import { getDataFromDraft, redirectSPA } from "../../shared/utils/utils";
+import { StringFilter } from "../../../UIKit/Filters/FiltersTypes";
+import Button from "../../../UIKit/Button/Button";
+import SelectButton from "./SelectButton/SelectButton";
+import Loader from "../../../UIKit/Loader/Loader";
 import Scripts from "../../shared/utils/clientScripts";
 
 /** Форма отбора обращений */
@@ -14,29 +19,66 @@ export default function SelectRequestForm() {
   const [data, setValue] = selectRequestContext.useState();
   const contentWrapperRef = useRef<HTMLDivElement>(null);
 
-  // Подгрузка данных
-  React.useLayoutEffect(() => {
-    // Данные формы из черновика
-    let draftData: SelectRequestData;
+  // Инициализация с черновиком
+  const initializeWithDraft = (filtersData: SelectRequestData) => {
     try {
-      draftData = getDataFromDraft();
+      const draftData: SelectRequestData | undefined = getDataFromDraft();
+      if (draftData) {
+        filtersData.filters = draftData.filters;
+        filtersData.filterStates = draftData.filterStates;
+      }
     } catch (e) {
       throw new Error("Ошибка получения данных из черновика: " + e);
     }
+  }
 
-    if (!draftData) return;
+  const [isMultipleSelect, setIsMultipleSelect] = useState<boolean>(false);
+  const [isSelectable, setIsSelectable] = useState<boolean>(false);
 
-    // Установка фильтров
-    setValue("filters", draftData.filters);
-    // Установка состояния оберток фильтров
-    setValue("filterStates", draftData.filterStates);
+  // Инициализация с параметрами
+  const initializeWithParams = (filtersData: SelectRequestData) => {
+    // Поиск по ФИО
+    const fieldId = new URLSearchParams(window.location.search).get("field_id");
+    const fullname = new URLSearchParams(window.location.search).get("fullname");
+
+    // Множественный выбор
+    const selectMultiple = new URLSearchParams(window.location.search).get("select_multiple");
+    if (selectMultiple != undefined) {
+      setIsMultipleSelect(true)
+    }
+
+    if (fieldId != undefined) {
+      setIsSelectable(true);
+
+      if (fullname) {
+        filtersData.filters.number.value = fullname;
+        filtersData.filterStates.number = true;
+      }
+    }
+  }
+
+  const [isInitializing, setIsInitializing] = useState<boolean>(true);
+
+  // Подгрузка данных
+  useEffect(() => {
+    Scripts.OnInit().then(() => {
+      // Данные формы из черновика
+      let filtersData: SelectRequestData = new SelectRequestData();
+
+      initializeWithDraft(filtersData)
+      initializeWithParams(filtersData);
+
+      // Установка фильтров
+      setValue("filters", filtersData.filters);
+      // Установка состояния оберток фильтров
+      setValue("filterStates", filtersData.filterStates);
+
+      setIsInitializing(false);
+    })
   }, []);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const [isShowFilters, setIsShowFilters] = useState<boolean>(true);
+
   const toggleShowFilters = () => setIsShowFilters(!isShowFilters);
 
   // Ширина списка
@@ -58,38 +100,33 @@ export default function SelectRequestForm() {
     setListWidth(width);
   };
 
-  //Инициализация
-  useEffect(() => {
-    const initialize = async () => {
-      await Scripts.OnInit();
-    };
-    initialize();
-  }, []);
-
   return (
     <selectRequestContext.Provider value={{ data, setValue }}>
       <div className="select-request-form">
-        <div className="select-request-form__header">
-          <Header
-            clickFilterHandler={toggleShowFilters}
-            elementsCount={data.elementsCount}
-            title="Форма отбора застрахованных"
-          />
-        </div>
-        <div className="select-request-form__content" ref={contentWrapperRef}>
-          <div
-            className={`select-request-form__filters${
-              !isShowFilters ? " select-request-form__filters_hidden" : ""
-            }`}
-          >
-            <SelectRequestFiltersForm />
-          </div>
-          <div className="select-request-form__list">
-            <div>
-              <SelectRequestList width={listWidth} />
+        {isInitializing && <div className="select-request-form__loader"><Loader /></div>}
+        {!isInitializing && (
+          <>
+            <div className="select-request-form__header">
+              <Header
+                clickFilterHandler={toggleShowFilters}
+                elementsCount={data.elementsCount}
+                title="Форма отбора застрахованных"
+              >
+                <SelectButton />
+              </Header>
             </div>
-          </div>
-        </div>
+            <div className="select-request-form__content" ref={contentWrapperRef}>
+              <div className={`select-request-form__filters${!isShowFilters ? " select-request-form__filters_hidden" : ""}`}>
+                <SelectRequestFiltersForm />
+              </div>
+              <div className="select-request-form__list">
+                <div>
+                  <SelectRequestList isMultipleSelect={isMultipleSelect} isSelectable={isSelectable} width={listWidth} />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </selectRequestContext.Provider>
   );
