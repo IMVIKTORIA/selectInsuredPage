@@ -31,6 +31,8 @@ function Header({
     if (data.filters.email.value) return true;
     if (data.filters.numberPolicy.value) return true;
     if (data.filters.product.value) return true;
+    if (data.filters.insurer.value) return true;
+    if (data.filters.contract.value) return true;
 
     // Поиск по датам
     if (data.filters.birthDate.valueFrom || data.filters.birthDate.valueTo)

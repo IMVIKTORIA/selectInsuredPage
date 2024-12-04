@@ -49,7 +49,6 @@ export default function SelectRequestForm() {
 
     if (fieldId != undefined) {
       setIsSelectable(true);
-
       if (fullname) {
         filtersData.filters.number.value = fullname;
         filtersData.filterStates.number = true;

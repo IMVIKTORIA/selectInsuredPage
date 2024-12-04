@@ -40,6 +40,8 @@ async function getAppeals(page: number, sortData?: SortData, searchData?: Select
       info: "test",
     }),
     gender: new ItemData({ value: "муж", info: "test" }),
+    contract: new ItemData({ value: "aaaaa", info: "test" }),
+    insurer: new ItemData({ value: "yyyyy", info: "test" }),
   };
   return {
     items: Array(20)
