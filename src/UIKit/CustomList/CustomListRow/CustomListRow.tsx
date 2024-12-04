@@ -26,6 +26,8 @@ interface ListRowProps<ItemType = any> {
 
 	reloadData: () => void
 
+	listRef?: React.RefObject<HTMLDivElement>
+
 	/** Возможность выбора строки */
 	isSelectable?: boolean
 	/** Множественный выбор строк */
@@ -39,7 +41,7 @@ interface ListRowProps<ItemType = any> {
 
 /** Строка таблицы */
 function CustomListRow<ItemType = any>(props: ListRowProps<ItemType>) {
-	const { isShowDetails, columnsSettings, data, getDetailsLayout, setOpenRowIndex, isOpen, isClickable, reloadData, isSelectable, isMultipleSelect, toggleChecked, isChecked } = props;
+	const { isShowDetails, columnsSettings, data, getDetailsLayout, setOpenRowIndex, isOpen, isClickable, reloadData, listRef, isSelectable, isMultipleSelect, toggleChecked, isChecked } = props;
 
 	/** Получение значения класса строки */
 	const getRowClassname = (): string => {
@@ -68,7 +70,7 @@ function CustomListRow<ItemType = any>(props: ListRowProps<ItemType>) {
 						const columnData: ItemData<any> = data[settings.code];
 
 						return (
-							<CustomListRowColumn data={columnData} {...settings} />
+							<CustomListRowColumn listRef={listRef} data={columnData} {...settings} />
 						)
 					})}
 				</div>

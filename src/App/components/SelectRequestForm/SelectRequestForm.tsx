@@ -49,7 +49,6 @@ export default function SelectRequestForm() {
 
     if (fieldId != undefined) {
       setIsSelectable(true);
-
       if (fullname) {
         filtersData.filters.number.value = fullname;
         filtersData.filterStates.number = true;
@@ -96,8 +95,13 @@ export default function SelectRequestForm() {
 
   // Обработчик изменения размера
   const handleResizeWrapper = () => {
-    const width = contentWrapperRef.current?.getBoundingClientRect().width ?? 0;
+    const element = document.querySelector(".select-request-form__content");
+    const width = element?.getBoundingClientRect().width ?? 0;
     setListWidth(width);
+  };
+
+  const setContentWrapperRef = (element: HTMLDivElement) => {
+    handleResizeWrapper()
   };
 
   return (
@@ -115,7 +119,7 @@ export default function SelectRequestForm() {
                 <SelectButton />
               </Header>
             </div>
-            <div className="select-request-form__content" ref={contentWrapperRef}>
+            <div className="select-request-form__content" ref={setContentWrapperRef}>
               <div className={`select-request-form__filters${!isShowFilters ? " select-request-form__filters_hidden" : ""}`}>
                 <SelectRequestFiltersForm />
               </div>

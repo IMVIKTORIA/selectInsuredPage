@@ -10,7 +10,7 @@
     align-items: center;
 
     & > div {
-      padding-right: 20px;
+      // padding: 0px 20px;
       height: 52px;
       align-items: center;
       display: flex;
@@ -32,6 +32,10 @@
     &_scrollable {
       overflow-x: auto;
       overflow-y: scroll;
+    }
+
+    &-wrapper {
+      position: relative;
     }
   }
 

@@ -1,9 +1,4 @@
-import {
-  FetchData,
-  ItemData,
-  ItemDataString,
-  SortData,
-} from "../../../UIKit/CustomList/CustomListTypes";
+import { FetchData, ItemData, ItemDataString, SortData } from "../../../UIKit/CustomList/CustomListTypes";
 import { ObjectItem } from "../../../UIKit/Filters/FiltersTypes";
 import { FetchInputData } from "../../../UIKit/shared/types/types";
 import { SelectRequestFilters } from "../../stores/SelectRequestContext";
@@ -18,11 +13,7 @@ function randomDelay() {
 }
 
 /** Получение списка обращений */
-async function getAppeals(
-  page: number,
-  sortData?: SortData,
-  searchData?: SelectRequestFilters
-): Promise<FetchData<SelectRequestData>> {
+async function getAppeals(page: number, sortData?: SortData, searchData?: SelectRequestFilters): Promise<FetchData<SelectRequestData>> {
   await randomDelay();
 
   console.log({
@@ -37,15 +28,23 @@ async function getAppeals(
     startDate: new ItemDataString("01.01.2023"),
     endDate: new ItemDataString("02.01.2023"),
     numberPolicy: new ItemData({ value: "12345", info: "test" }),
-    product: new ItemData({ value: "пример", info: "test" }),
+    product: new ItemData({
+      value:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae perferendis officiis veniam, rem, assumenda, veritatis praesentium nobis provident minima dolores voluptatem eveniet quibusdam suscipit distinctio harum. Facilis blanditiis mollitia inventore?",
+      info: "test",
+    }),
     telephone: new ItemData({ value: "+7 912 345 67 89", info: "test" }),
-    email: new ItemData({ value: "test@test.com", info: "test" }),
+    email: new ItemData({
+      value:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae perferendis officiis veniam, rem, assumenda, veritatis praesentium nobis provident minima dolores voluptatem eveniet quibusdam suscipit distinctio harum. Facilis blanditiis mollitia inventore?",
+      info: "test",
+    }),
     gender: new ItemData({ value: "муж", info: "test" }),
     contract: new ItemData({ value: "aaaaa", info: "test" }),
     insurer: new ItemData({ value: "yyyyy", info: "test" }),
   };
   return {
-    items: Array(5)
+    items: Array(20)
       .fill(0)
       .map((data, index) => {
         return {
@@ -58,9 +57,7 @@ async function getAppeals(
 }
 
 /** Получение количества задач по фильтрам */
-async function getRequestsCount(
-  searchData?: SelectRequestFilters
-): Promise<number> {
+async function getRequestsCount(searchData?: SelectRequestFilters): Promise<number> {
   return 0;
 }
 
@@ -68,10 +65,7 @@ async function getRequestsCount(
 async function getGenders(): Promise<ObjectItem[]> {
   await randomDelay();
 
-  const genders: ObjectItem[] = [
-    new ObjectItem({ code: "test", value: "муж" }),
-    new ObjectItem({ code: "test1", value: "жен" }),
-  ];
+  const genders: ObjectItem[] = [new ObjectItem({ code: "test", value: "муж" }), new ObjectItem({ code: "test1", value: "жен" })];
 
   return genders;
 }

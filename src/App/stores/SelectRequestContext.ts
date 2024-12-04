@@ -1,12 +1,6 @@
 import React from "react";
 import { initGlobalContext } from "./GlobalContext";
-import {
-  AppFilter,
-  DateFilter,
-  IFiltersData,
-  ListFilter,
-  StringFilter,
-} from "../../UIKit/Filters/FiltersTypes";
+import { AppFilter, DateFilter, IFiltersData, ListFilter, StringFilter } from "../../UIKit/Filters/FiltersTypes";
 
 /** Данные формы отбора обращения */
 export class SelectRequestData {
@@ -126,6 +120,4 @@ export class SelectRequestFilters implements IFiltersData {
   }
 }
 
-export const selectRequestContext = initGlobalContext<SelectRequestData>(
-  new SelectRequestData()
-);
+export const selectRequestContext = initGlobalContext<SelectRequestData>(new SelectRequestData());

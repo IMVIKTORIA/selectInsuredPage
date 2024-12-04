@@ -6,9 +6,6 @@
   align-items: center;
 
   &__name {
-    width: 10px;
-    flex: 1;
-    max-width: fit-content;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -21,6 +18,8 @@
     letter-spacing: 0.0025em;
     text-transform: uppercase;
     color: #959599;
+    width: 10px;
+    flex: 1;
   }
 
   &__button {
