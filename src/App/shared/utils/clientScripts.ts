@@ -28,13 +28,21 @@ async function getAppeals(page: number, sortData?: SortData, searchData?: Select
     startDate: new ItemDataString("01.01.2023"),
     endDate: new ItemDataString("02.01.2023"),
     numberPolicy: new ItemData({ value: "12345", info: "test" }),
-    product: new ItemData({ value: "пример", info: "test" }),
+    product: new ItemData({
+      value:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae perferendis officiis veniam, rem, assumenda, veritatis praesentium nobis provident minima dolores voluptatem eveniet quibusdam suscipit distinctio harum. Facilis blanditiis mollitia inventore?",
+      info: "test",
+    }),
     telephone: new ItemData({ value: "+7 912 345 67 89", info: "test" }),
-    email: new ItemData({ value: "test@test.com", info: "test" }),
+    email: new ItemData({
+      value:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae perferendis officiis veniam, rem, assumenda, veritatis praesentium nobis provident minima dolores voluptatem eveniet quibusdam suscipit distinctio harum. Facilis blanditiis mollitia inventore?",
+      info: "test",
+    }),
     gender: new ItemData({ value: "муж", info: "test" }),
   };
   return {
-    items: Array(5)
+    items: Array(20)
       .fill(0)
       .map((data, index) => {
         return {

@@ -1,7 +1,7 @@
 import React from 'react'
 import Icons from '../../shared/icons'
 
-interface CustomListSelectorProps {
+interface CustomListSelectorProps extends React.ComponentProps<'div'> {
 	/** Обработчик нажатия на selector */
 	onClickSelector: () => void;
 	/** Селектор активен */
@@ -18,7 +18,7 @@ function CustomListSelector(props: CustomListSelectorProps) {
 	const multipleLayout = isChecked ? Icons.Checked : Icons.Unchecked
 	const singleLayout = isChecked ? Icons.CheckedRadio : Icons.UncheckedRadio
 	return (
-		<div className='custom-list-selector'>
+		<div {...props} className='custom-list-selector'>
 			<div onClick={onClickSelector}>
 				{isMultiple ? multipleLayout : singleLayout}
 			</div>
