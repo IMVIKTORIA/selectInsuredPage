@@ -8,11 +8,15 @@ import Header from "../Header/Header";
 import SelectRequestFiltersForm from "../SelectRequestFiltersForm/SelectRequestFiltersForm";
 import SelectRequestList from "../SelectRequestList/SelectRequestList";
 import { getDataFromDraft, redirectSPA } from "../../shared/utils/utils";
-import { StringFilter } from "../../../UIKit/Filters/FiltersTypes";
 import Button from "../../../UIKit/Button/Button";
 import SelectButton from "./SelectButton/SelectButton";
 import Loader from "../../../UIKit/Loader/Loader";
 import Scripts from "../../shared/utils/clientScripts";
+import {
+  StringFilter,
+  DateFilter,
+  ListFilter,
+} from "../../../UIKit/Filters/FiltersTypes";
 
 /** Форма отбора обращений */
 export default function SelectRequestForm() {
@@ -24,13 +28,60 @@ export default function SelectRequestForm() {
     try {
       const draftData: SelectRequestData | undefined = getDataFromDraft();
       if (draftData) {
-        filtersData.filters = draftData.filters;
+        filtersData.filters.number = new StringFilter(
+          "number",
+          "Полное наименование",
+          draftData.filters.number?.value
+        );
+        filtersData.filters.birthDate = new DateFilter(
+          "birthDate",
+          "дата рождения",
+          {
+            valueFrom: draftData.filters.birthDate?.valueFrom,
+            valueTo: draftData.filters.birthDate?.valueTo,
+          }
+        );
+        filtersData.filters.gender = new ListFilter(
+          "gender",
+          "пол",
+          draftData.filters.gender?.values
+        );
+        filtersData.filters.numberPolicy = new StringFilter(
+          "numberPolicy",
+          "номер полиса",
+          draftData.filters.numberPolicy?.value
+        );
+        filtersData.filters.product = new StringFilter(
+          "product",
+          "продукт",
+          draftData.filters.product?.value
+        );
+        filtersData.filters.telephone = new StringFilter(
+          "telephone",
+          "телефон",
+          draftData.filters.telephone?.value
+        );
+        filtersData.filters.email = new StringFilter(
+          "email",
+          "email",
+          draftData.filters.email?.value
+        );
+        filtersData.filters.insurer = new StringFilter(
+          "insurer",
+          "страхователь",
+          draftData.filters.insurer?.value
+        );
+        filtersData.filters.contract = new StringFilter(
+          "contract",
+          "договор",
+          draftData.filters.contract?.value
+        );
         filtersData.filterStates = draftData.filterStates;
       }
     } catch (e) {
       throw new Error("Ошибка получения данных из черновика: " + e);
     }
-  }
+  };
 
   const [isMultipleSelect, setIsMultipleSelect] = useState<boolean>(false);
   const [isSelectable, setIsSelectable] = useState<boolean>(false);
@@ -39,12 +90,16 @@ export default function SelectRequestForm() {
   const initializeWithParams = (filtersData: SelectRequestData) => {
     // Поиск по ФИО
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
-    const fullname = new URLSearchParams(window.location.search).get("fullname");
+    const fullname = new URLSearchParams(window.location.search).get(
+      "fullname"
+    );
 
     // Множественный выбор
-    const selectMultiple = new URLSearchParams(window.location.search).get("select_multiple");
+    const selectMultiple = new URLSearchParams(window.location.search).get(
+      "select_multiple"
+    );
     if (selectMultiple != undefined) {
-      setIsMultipleSelect(true)
+      setIsMultipleSelect(true);
     }
 
     if (fieldId != undefined) {
@@ -54,7 +109,7 @@ export default function SelectRequestForm() {
         filtersData.filterStates.number = true;
       }
     }
-  }
+  };
 
   const [isInitializing, setIsInitializing] = useState<boolean>(true);
 
@@ -64,7 +119,7 @@ export default function SelectRequestForm() {
       // Данные формы из черновика
       let filtersData: SelectRequestData = new SelectRequestData();
 
-      initializeWithDraft(filtersData)
+      initializeWithDraft(filtersData);
       initializeWithParams(filtersData);
 
       // Установка фильтров
@@ -73,7 +128,7 @@ export default function SelectRequestForm() {
       setValue("filterStates", filtersData.filterStates);
 
       setIsInitializing(false);
-    })
+    });
   }, []);
 
   const [isShowFilters, setIsShowFilters] = useState<boolean>(true);
@@ -101,13 +156,17 @@ export default function SelectRequestForm() {
   };
 
   const setContentWrapperRef = (element: HTMLDivElement) => {
-    handleResizeWrapper()
+    handleResizeWrapper();
   };
 
   return (
     <selectRequestContext.Provider value={{ data, setValue }}>
       <div className="select-request-form">
-        {isInitializing && <div className="select-request-form__loader"><Loader /></div>}
+        {isInitializing && (
+          <div className="select-request-form__loader">
+            <Loader />
+          </div>
+        )}
         {!isInitializing && (
           <>
             <div className="select-request-form__header">
@@ -119,13 +178,24 @@ export default function SelectRequestForm() {
                 <SelectButton />
               </Header>
             </div>
-            <div className="select-request-form__content" ref={setContentWrapperRef}>
-              <div className={`select-request-form__filters${!isShowFilters ? " select-request-form__filters_hidden" : ""}`}>
+            <div
+              className="select-request-form__content"
+              ref={setContentWrapperRef}
+            >
+              <div
+                className={`select-request-form__filters${
+                  !isShowFilters ? " select-request-form__filters_hidden" : ""
+                }`}
+              >
                 <SelectRequestFiltersForm />
               </div>
               <div className="select-request-form__list">
                 <div>
-                  <SelectRequestList isMultipleSelect={isMultipleSelect} isSelectable={isSelectable} width={listWidth} />
+                  <SelectRequestList
+                    isMultipleSelect={isMultipleSelect}
+                    isSelectable={isSelectable}
+                    width={listWidth}
+                  />
                 </div>
               </div>
             </div>
