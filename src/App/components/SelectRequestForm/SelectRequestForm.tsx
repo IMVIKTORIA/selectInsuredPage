@@ -28,54 +28,12 @@ export default function SelectRequestForm() {
     try {
       const draftData: SelectRequestData | undefined = getDataFromDraft();
       if (draftData) {
-        filtersData.filters.number = new StringFilter(
-          "number",
-          "Полное наименование",
-          draftData.filters.number?.value
-        );
-        filtersData.filters.birthDate = new DateFilter(
-          "birthDate",
-          "дата рождения",
-          {
-            valueFrom: draftData.filters.birthDate?.valueFrom,
-            valueTo: draftData.filters.birthDate?.valueTo,
-          }
-        );
-        filtersData.filters.gender = new ListFilter(
-          "gender",
-          "пол",
-          draftData.filters.gender?.values
-        );
-        filtersData.filters.numberPolicy = new StringFilter(
-          "numberPolicy",
-          "номер полиса",
-          draftData.filters.numberPolicy?.value
-        );
-        filtersData.filters.product = new StringFilter(
-          "product",
-          "продукт",
-          draftData.filters.product?.value
-        );
-        filtersData.filters.telephone = new StringFilter(
-          "telephone",
-          "телефон",
-          draftData.filters.telephone?.value
-        );
-        filtersData.filters.email = new StringFilter(
-          "email",
-          "email",
-          draftData.filters.email?.value
-        );
-        filtersData.filters.insurer = new StringFilter(
-          "insurer",
-          "страхователь",
-          draftData.filters.insurer?.value
-        );
-        filtersData.filters.contract = new StringFilter(
-          "contract",
-          "договор",
-          draftData.filters.contract?.value
-        );
+        for(const key of Object.keys(draftData.filters)) {
+          const resetBuffer = filtersData.filters[key].reset;
+          filtersData.filters[key] = draftData.filters[key];
+          filtersData.filters[key].reset = resetBuffer;
+        }
+
         filtersData.filterStates = draftData.filterStates;
       }
     } catch (e) {

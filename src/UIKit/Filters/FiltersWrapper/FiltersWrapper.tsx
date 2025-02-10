@@ -14,11 +14,16 @@ export default function FiltersWrapper({ searchHandler, resetHandler, children, 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Enter" && searchHandler) searchHandler()
+			removeListener()
 		};
+		
+		const removeListener = () => {
+			document.removeEventListener("keydown", handleKeyDown)
+		}
 
 		document.addEventListener("keydown", handleKeyDown);
-
-		return () => document.removeEventListener("keydown", handleKeyDown);
+		
+		return () => removeListener()
 	}, [searchHandler]);
 
 	return (
