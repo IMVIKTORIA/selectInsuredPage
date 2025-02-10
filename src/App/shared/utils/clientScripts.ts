@@ -1,4 +1,9 @@
-import { FetchData, ItemData, ItemDataString, SortData } from "../../../UIKit/CustomList/CustomListTypes";
+import {
+  FetchData,
+  ItemData,
+  ItemDataString,
+  SortData,
+} from "../../../UIKit/CustomList/CustomListTypes";
 import { ObjectItem } from "../../../UIKit/Filters/FiltersTypes";
 import { FetchInputData } from "../../../UIKit/shared/types/types";
 import { SelectRequestFilters } from "../../stores/SelectRequestContext";
@@ -13,7 +18,11 @@ function randomDelay() {
 }
 
 /** Получение списка обращений */
-async function getAppeals(page: number, sortData?: SortData, searchData?: SelectRequestFilters): Promise<FetchData<SelectRequestData>> {
+async function getAppeals(
+  page: number,
+  sortData?: SortData,
+  searchData?: SelectRequestFilters
+): Promise<FetchData<SelectRequestData>> {
   await randomDelay();
 
   console.log({
@@ -57,7 +66,9 @@ async function getAppeals(page: number, sortData?: SortData, searchData?: Select
 }
 
 /** Получение количества задач по фильтрам */
-async function getRequestsCount(searchData?: SelectRequestFilters): Promise<number> {
+async function getRequestsCount(
+  searchData?: SelectRequestFilters
+): Promise<number> {
   return 0;
 }
 
@@ -65,7 +76,10 @@ async function getRequestsCount(searchData?: SelectRequestFilters): Promise<numb
 async function getGenders(): Promise<ObjectItem[]> {
   await randomDelay();
 
-  const genders: ObjectItem[] = [new ObjectItem({ code: "test", value: "муж" }), new ObjectItem({ code: "test1", value: "жен" })];
+  const genders: ObjectItem[] = [
+    new ObjectItem({ code: "test", value: "муж" }),
+    new ObjectItem({ code: "test1", value: "жен" }),
+  ];
 
   return genders;
 }

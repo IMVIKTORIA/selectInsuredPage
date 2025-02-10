@@ -11,19 +11,24 @@ import {
 } from "../../stores/SelectRequestContext";
 import { SelectRequestData } from "../../shared/types";
 import utils, { redirectSPA } from "../../shared/utils/utils";
+import { localStorageDraftKey } from "../../shared/utils/constants";
 
 interface SelectRequestListProps {
   /** Ширина списка */
   width: number;
 
   /** Возможность выбора строки */
-  isSelectable: boolean
+  isSelectable: boolean;
   /** Множественный выбор */
-  isMultipleSelect: boolean
+  isMultipleSelect: boolean;
 }
 
 /** Фильтры формы отбра задач */
-export default function SelectRequestList({ width, isMultipleSelect, isSelectable }: SelectRequestListProps) {
+export default function SelectRequestList({
+  width,
+  isMultipleSelect,
+  isSelectable,
+}: SelectRequestListProps) {
   const { data, setValue } = selectRequestContext.useContext();
 
   /** Установка обработчика нажатия на поиск */
@@ -38,12 +43,16 @@ export default function SelectRequestList({ width, isMultipleSelect, isSelectabl
     if (!contractorId) return;
 
     // Запись текущего url в localStorage
-    window.localStorage.setItem("medpultPathBefore", window.location.pathname + window.location.search)
+    window.localStorage.setItem(
+      "medpultPathBefore",
+      window.location.pathname + window.location.search
+    );
     localStorage.setItem("medpultContractorId", contractorId);
+    localStorage.setItem(localStorageDraftKey, JSON.stringify(data));
 
     // Переход
     const link = Scripts.getContractorPageCode();
-    redirectSPA(link)
+    redirectSPA(link);
   };
 
   // Вычислить количество отобранных элементов
@@ -54,10 +63,13 @@ export default function SelectRequestList({ width, isMultipleSelect, isSelectabl
   }, []);
 
   /** Доступ к поиску */
-  const searchAccess = Scripts.getSelectRequestAccessSettings().searchButton == 2;
+  const searchAccess =
+    Scripts.getSelectRequestAccessSettings().searchButton == 2;
 
   /** Присвоить выбранные элементы */
-  const setSelectedItems = (ids: string[]) => { setValue("selectedItemsIds", ids) }
+  const setSelectedItems = (ids: string[]) => {
+    setValue("selectedItemsIds", ids);
+  };
   /** Колонки списка */
   const columns = [
     new ListColumnData({
