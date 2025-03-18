@@ -36,13 +36,21 @@ export default function SelectButton({ }: SelectButtonProps) {
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
     if (fieldId) await Scripts.assignInsured(fieldId, selectedContractorId);
 
+    // Получение id обращения
+    const url = new URL(window.location.href);
+    const requestId = url.searchParams.get("request_id");
+    
     const mode = new URLSearchParams(window.location.search).get("mode");
     const request_page_path = Scripts.getRequestPageCode();
+
+    const redirectUrl = new URL(window.location.origin + "/" + request_page_path);
     if (mode) {
-      redirectSPA(request_page_path + "?mode=" + mode)
+      redirectUrl.searchParams.set("mode", mode)
     } else {
-      redirectSPA(request_page_path)
+      if(requestId) redirectUrl.searchParams.set("request_id", requestId)
     }
+    
+    redirectSPA(redirectUrl.toString())
   }
 
   // Установить список застрахованного в обращении
@@ -50,13 +58,21 @@ export default function SelectButton({ }: SelectButtonProps) {
     const selectedContractorsIds = data.selectedItemsIds;
     await Scripts.assignInsuredList(selectedContractorsIds);
 
+    // Получение id обращения
+    const url = new URL(window.location.href);
+    const requestId = url.searchParams.get("request_id");
+    
     const mode = new URLSearchParams(window.location.search).get("mode");
     const request_page_path = Scripts.getRequestPageCode();
+
+    const redirectUrl = new URL(window.location.origin + "/" + request_page_path);
     if (mode) {
-      redirectSPA(request_page_path + "?mode=" + mode)
+      redirectUrl.searchParams.set("mode", mode)
     } else {
-      redirectSPA(request_page_path)
+      if(requestId) redirectUrl.searchParams.set("request_id", requestId)
     }
+    
+    redirectSPA(redirectUrl.toString())
   }
 
   // Нажатие на кнопку выбрать
