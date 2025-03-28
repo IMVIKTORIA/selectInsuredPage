@@ -8,6 +8,7 @@ import FilterItemSearch from "../../../UIKit/Filters/FilterItems/FilterItemSearc
 import FilterItemCategory from "../../../UIKit/Filters/FilterItems/FilterItemCategory/FilterItemCategory";
 import Scripts from "../../shared/utils/clientScripts";
 import { saveState } from "../../shared/utils/utils";
+import { applyPhoneMask } from "../../shared/utils/masks";
 
 interface SelectRequestFiltersProps {}
 
@@ -129,6 +130,8 @@ export default function SelectRequestFiltersForm({}: SelectRequestFiltersProps) 
         setFilterValue={changeValueConstructor(
           data.filters.telephone.fieldCode
         )}
+        maskFunction={applyPhoneMask}
+        placeholder={"+7 000 000 00 00"}
       />
       <FilterItemString
         setIsOpenInit={setIsOpenFactory(data.filters.email.fieldCode)}
