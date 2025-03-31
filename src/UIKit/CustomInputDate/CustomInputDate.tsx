@@ -65,7 +65,6 @@ function CustomInputDate(props: CustomInputDateProps) {
 		const picker = pickerRef.current;
 		if (!picker) return;
 
-		console.log(moment(value, 'DD.MM.YYYY').format())
 		// Если дата валидна - изменить значение пикера
 		if(value.match(/\d\d\.\d\d\.\d\d\d\d/gm)) {
 			picker.value = moment(value, 'DD.MM.YYYY').format("YYYY-MM-DD")
