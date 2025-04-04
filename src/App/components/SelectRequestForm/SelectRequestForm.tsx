@@ -118,13 +118,15 @@ export default function SelectRequestForm() {
     handleResizeWrapper();
   };
 
+  const [messages, setMessages] = useState<string[]>([])
+
   function showError(message: string) {
-    setValue("errorMessages", [...data.errorMessages, message]);
+    setMessages([...messages, message]);
   }
 
   return (
     <selectRequestContext.Provider value={{ data, setValue }}>
-      <PopupsContainer />
+      <PopupsContainer messages={messages} setMessages={setMessages}/>
       <div className="select-request-form">
         {isInitializing && (
           <div className="select-request-form__loader">
@@ -139,7 +141,7 @@ export default function SelectRequestForm() {
                 elementsCount={data.elementsCount}
                 title="Форма отбора застрахованных"
               >
-                <SelectButton />
+                <SelectButton showError={showError}/>
               </Header>
             </div>
             <div

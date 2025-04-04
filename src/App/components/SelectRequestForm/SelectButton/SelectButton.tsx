@@ -5,10 +5,11 @@ import Button from "../../../../UIKit/Button/Button";
 import { redirectSPA } from "../../../shared/utils/utils";
 
 interface SelectButtonProps {
+  showError(message: string): void
 }
 
 /** Кнопка Выбрать */
-export default function SelectButton({ }: SelectButtonProps) {
+export default function SelectButton({showError}: SelectButtonProps) {
   const { data, setValue } = selectRequestContext.useContext();
 
   // Установить контрагента в договор
@@ -56,10 +57,6 @@ export default function SelectButton({ }: SelectButtonProps) {
 
     openRequest()
   } 
-
-  function showError(message: string) {
-    setValue("errorMessages", [...data.errorMessages, message]);
-  }
 
   /** Валидация списка застрахованных */
   async function validateInsuredList(selectedContractorsIds: string[]): Promise<string | undefined> {
