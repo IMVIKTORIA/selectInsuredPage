@@ -17,6 +17,7 @@ import {
   DateFilter,
   ListFilter,
 } from "../../../UIKit/Filters/FiltersTypes";
+import PopupsContainer from "../PopupsContainer/PopupsContainer";
 
 /** Форма отбора обращений */
 export default function SelectRequestForm() {
@@ -117,8 +118,13 @@ export default function SelectRequestForm() {
     handleResizeWrapper();
   };
 
+  function showError(message: string) {
+    setValue("errorMessages", [...data.errorMessages, message]);
+  }
+
   return (
     <selectRequestContext.Provider value={{ data, setValue }}>
+      <PopupsContainer />
       <div className="select-request-form">
         {isInitializing && (
           <div className="select-request-form__loader">

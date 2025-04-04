@@ -1,0 +1,33 @@
+/* Контейнер всплывающих окон */
+.medpult-popups-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1010;
+    width: 100%;
+    height: fit-content;
+    max-height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    //padding: 0 18px;
+}
+
+.mk-simple-alert-box {
+    font-family: "Inter";
+    padding: 10px 15px;
+    //margin: 10px 0;
+    //border-left: 5px solid;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+
+.mk-simple-alert-box-error {
+    //background-color: #f0cccc;
+    //color: #a94442;
+    //border-color: #db5552;
+    background-color:#FF4545;
+    color: #FFFFFF;
+}

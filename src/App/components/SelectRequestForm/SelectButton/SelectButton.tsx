@@ -29,13 +29,7 @@ export default function SelectButton({ }: SelectButtonProps) {
     redirectSPA(select_task_page_code);
   }
 
-  // Установить застрахованного в обращение
-  const setRequestInsured = async () => {
-    const selectedContractorId = data.selectedItemsIds[0];
-
-    const fieldId = new URLSearchParams(window.location.search).get("field_id");
-    if (fieldId) await Scripts.assignInsured(fieldId, selectedContractorId);
-
+  function openRequest() {
     // Получение id обращения
     const url = new URL(window.location.href);
     const requestId = url.searchParams.get("request_id");
@@ -53,26 +47,42 @@ export default function SelectButton({ }: SelectButtonProps) {
     redirectSPA(redirectUrl.toString())
   }
 
+  // Установить застрахованного в обращение
+  const setRequestInsured = async () => {
+    const selectedContractorId = data.selectedItemsIds[0];
+
+    const fieldId = new URLSearchParams(window.location.search).get("field_id");
+    if (fieldId) await Scripts.assignInsured(fieldId, selectedContractorId);
+
+    openRequest()
+  } 
+
+  function showError(message: string) {
+    setValue("errorMessages", [...data.errorMessages, message]);
+  }
+
+  /** Валидация списка застрахованных */
+  async function validateInsuredList(selectedContractorsIds: string[]): Promise<string | undefined> {
+    // Вылидация по договорам
+    const contractValidation = await Scripts.validateInsuredListContracts(selectedContractorsIds);
+    if(!contractValidation)  return "У выбранных контрагентов должен быть общий договор"
+
+    return undefined
+  }
   // Установить список застрахованного в обращении
   const setRequestInsuredList = async () => {
     const selectedContractorsIds = data.selectedItemsIds;
+
+    // Валидация по договорам
+    const validationMessage = await validateInsuredList(selectedContractorsIds);
+    if(validationMessage) {
+      showError(validationMessage)
+      return;
+    }
+
     await Scripts.assignInsuredList(selectedContractorsIds);
 
-    // Получение id обращения
-    const url = new URL(window.location.href);
-    const requestId = url.searchParams.get("request_id");
-    
-    const mode = new URLSearchParams(window.location.search).get("mode");
-    const request_page_path = Scripts.getRequestPageCode();
-
-    const redirectUrl = new URL(window.location.origin + "/" + request_page_path);
-    if (mode) {
-      redirectUrl.searchParams.set("mode", mode)
-    } else {
-      if(requestId) redirectUrl.searchParams.set("request_id", requestId)
-    }
-    
-    redirectSPA(redirectUrl.toString())
+    openRequest()
   }
 
   // Нажатие на кнопку выбрать

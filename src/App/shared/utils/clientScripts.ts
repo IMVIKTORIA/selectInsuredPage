@@ -256,6 +256,12 @@ async function OnInit(): Promise<void> {
   await randomDelay();
 }
 
+/** Валидация списка контрагентов по договорам */
+async function validateInsuredListContracts(selectedContractorsIds:string[]) {
+  await randomDelay()
+  return false
+}
+
 export default {
   getAppeals,
   getRequestsCount,
@@ -276,4 +282,6 @@ export default {
   assignInsured,
   assignInsuredList,
   OnInit,
+
+  validateInsuredListContracts,
 };

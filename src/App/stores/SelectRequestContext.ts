@@ -14,6 +14,8 @@ export class SelectRequestData {
   elementsCount: number;
   /** Идентификаторы выбранных элементов */
   selectedItemsIds: string[];
+  /** Список сообщений с ошибками */
+  errorMessages: string[]
 
   constructor() {
     this.filters = new SelectRequestFilters();
@@ -23,6 +25,7 @@ export class SelectRequestData {
     };
     this.elementsCount = 0;
     this.selectedItemsIds = [];
+    this.errorMessages = [];
   }
 }
 
