@@ -12,11 +12,11 @@ import {
 import { SelectRequestData } from "../../shared/types";
 import utils, { redirectSPA } from "../../shared/utils/utils";
 import { localStorageDraftKey } from "../../shared/utils/constants";
+import ColumnWithValidation from "../ColumnWithValidation/ColumnWithValidation";
 
 interface SelectRequestListProps {
   /** Ширина списка */
   width: number;
-
   /** Возможность выбора строки */
   isSelectable: boolean;
   /** Множественный выбор */
@@ -70,8 +70,47 @@ export default function SelectRequestList({
   const setSelectedItems = (ids: string[]) => {
     setValue("selectedItemsIds", ids);
   };
+
+  /** Обработчик нажатия на номер полиса */
+  const onClickNumberPolicy = async (props: ItemData) => {
+    const policyId = props.info;
+    if (!policyId) return;
+    // Запись текущего url в localStorage
+    window.localStorage.setItem(
+      "medpultPathBefore",
+      window.location.pathname + window.location.search
+    );
+
+    // Получение id договора по идентификатору полиса
+    const treatyId = await Scripts.getTreatyIdByPolicyId(policyId);
+    if (!treatyId) return;
+
+    // Переход на договор
+    const contractorId = await Scripts.getContracortId(policyId);
+    if (!contractorId) return;
+    localStorage.setItem("medpult-treaty-insured-id-draft", contractorId);
+    localStorage.setItem("medpult-treaty-id", treatyId);
+    const link = Scripts.getTreatyPageCode();
+
+    redirectSPA(link);
+  };
+
   /** Колонки списка */
   const columns = [
+    new ListColumnData({
+      name: "",
+      code: "isIntegration",
+      fr: 0.2,
+      isIcon: true,
+    }),
+    new ListColumnData({
+      name: data.filters.numberPolicy.fieldName,
+      code: data.filters.numberPolicy.fieldCode,
+      fr: 1,
+      isSortable: searchAccess,
+      isLink: true,
+      onClick: onClickNumberPolicy,
+    }),
     new ListColumnData({
       name: data.filters.number.fieldName,
       code: data.filters.number.fieldCode,
@@ -89,15 +128,8 @@ export default function SelectRequestList({
     new ListColumnData({
       name: data.filters.gender.fieldName,
       code: data.filters.gender.fieldCode,
-      fr: 1,
+      fr: 0.5,
       isSortable: searchAccess,
-    }),
-    new ListColumnData({
-      name: data.filters.numberPolicy.fieldName,
-      code: data.filters.numberPolicy.fieldCode,
-      fr: 1,
-      isSortable: searchAccess,
-      isLink: true,
     }),
     new ListColumnData({
       name: data.filters.startDate.fieldName,
@@ -110,6 +142,7 @@ export default function SelectRequestList({
       code: data.filters.endDate.fieldCode,
       fr: 1,
       isSortable: searchAccess,
+      getCustomColumComponent: ColumnWithValidation,
     }),
     new ListColumnData({
       name: data.filters.product.fieldName,

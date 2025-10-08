@@ -1,82 +1,109 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ItemData, ListColumnData } from '../CustomListTypes'
+import React, { useEffect, useRef, useState } from "react";
+import { ItemData, ListColumnData } from "../CustomListTypes";
+import icons from "../../../App/shared/icons";
 
 interface ListColumnProps extends ListColumnData {
-	data: ItemData<any>
-
-	listRef?: React.RefObject<HTMLDivElement>
+  data: ItemData<any>;
+  listRef?: React.RefObject<HTMLDivElement>;
 }
 
 /** Столбец одной строки таблицы */
 function CustomListRowColumn(props: ListColumnProps) {
-	const { fr, data, isLink, onClick, listRef, isRollable } = props;
+  const {
+    fr,
+    data,
+    isLink: isLinkProp,
+    onClick,
+    listRef,
+    isRollable,
+    code,
+    isIcon,
+  } = props;
 
-	const onClickColumn = isLink && onClick ? () => { onClick(data) } : () => { };
+  const isLink = code === "numberPolicy" ? data?.isLink === true : isLinkProp;
 
-	const wrapperRef = useRef<HTMLDivElement>(null);
-	const spanRef = useRef<HTMLSpanElement>(null);
+  const onClickColumn = isLink && onClick ? () => onClick(data) : () => {};
 
-	const [isShowMore, setIsShowMore] = useState<boolean>(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const spanRef = useRef<HTMLSpanElement>(null);
 
-	const showMore = () => {
-		if (!isRollable) return;
+  const [isShowMore, setIsShowMore] = useState<boolean>(false);
 
-		setIsShowMore(true);
+  const showMore = () => {
+    if (!isRollable) return;
 
-		if (!spanRef.current) return
-		if (!wrapperRef.current) return
-		if (!listRef?.current) return
+    setIsShowMore(true);
 
-		spanRef.current.style.width = wrapperRef.current.getBoundingClientRect().width + "px"
+    if (!spanRef.current) return;
+    if (!wrapperRef.current) return;
+    if (!listRef?.current) return;
 
-		// const moreWrapperBottom = spanRef.current.getBoundingClientRect().bottom;
-		// const listWrapperBottom = listRef.current.getBoundingClientRect().bottom
+    spanRef.current.style.width =
+      wrapperRef.current.getBoundingClientRect().width + "px";
+  };
 
-		// console.log(moreWrapperBottom)
-		// console.log(listWrapperBottom)
-		// console.log(spanRef.current.getBoundingClientRect())
+  useEffect(() => {
+    if (!isShowMore) return;
+    if (!spanRef.current) return;
+    if (!wrapperRef.current) return;
+    if (!listRef?.current) return;
 
-		// if (moreWrapperBottom > listWrapperBottom) {
-		// 	console.log("иди ты нахуй сука")
-		// 	// spanRef.current.style.removeProperty("margin-top")
-		// 	// spanRef.current.style.marginBottom = "0"
-		// }
-	}
+    const moreWrapperBottom = spanRef.current.getBoundingClientRect().bottom;
+    const rowBottom =
+      spanRef.current
+        .closest(".custom-list-row-column")
+        ?.getBoundingClientRect().bottom ?? 0;
+    const listWrapperBottom = listRef.current.getBoundingClientRect().bottom;
 
-	useEffect(() => {
-		if (!isShowMore) return;
-		if (!spanRef.current) return
-		if (!wrapperRef.current) return
-		if (!listRef?.current) return
+    if (moreWrapperBottom > listWrapperBottom) {
+      const test = rowBottom - listWrapperBottom;
+      spanRef.current.style.marginTop =
+        52 - spanRef.current.getBoundingClientRect().height - test + "px";
+    }
+  }, [isShowMore]);
 
-		const moreWrapperBottom = spanRef.current.getBoundingClientRect().bottom;
-		const rowBottom = spanRef.current.closest(".custom-list-row-column")?.getBoundingClientRect().bottom ?? 0;
-		const listWrapperBottom = listRef.current.getBoundingClientRect().bottom
+  const hideMore = () => {
+    setIsShowMore(false);
 
-		if (moreWrapperBottom > listWrapperBottom) {
-			const test = rowBottom - listWrapperBottom
-			spanRef.current.style.marginTop = (52 - (spanRef.current.getBoundingClientRect().height) - test) + "px";
-		}
-	}, [isShowMore])
+    if (!spanRef.current) return;
+    spanRef.current.style.removeProperty("margin-top");
+  };
 
-	const hideMore = () => {
-		setIsShowMore(false);
-
-		if (!spanRef.current) return
-		spanRef.current.style.removeProperty("margin-top")
-	}
-
-	return (
-		<div className={
-			isLink
-				? "custom-list-row-column custom-list-row-column__link"
-				: "custom-list-row-column"
-		} style={{ flex: fr }} ref={wrapperRef}>
-			<span onMouseEnter={showMore} onMouseOut={hideMore} ref={spanRef} title={isRollable ? "" : data.value} onClick={onClickColumn} className={isShowMore ? 'custom-list-row-column__more' : 'custom-list-row-column__less'}>
-				{data.value}
-			</span>
-		</div>
-	)
+  const iconToShow =
+    code === "isIntegration" && data?.info === true
+      ? icons.IntegrationButton
+      : null;
+  return (
+    <div
+      className={
+        isLink
+          ? "custom-list-row-column custom-list-row-column__link"
+          : "custom-list-row-column"
+      }
+      style={{ flex: fr }}
+      ref={wrapperRef}
+    >
+      <span
+        onMouseEnter={showMore}
+        onMouseOut={hideMore}
+        ref={spanRef}
+        title={isRollable ? "" : data.value}
+        onClick={onClickColumn}
+        className={
+          isShowMore
+            ? "custom-list-row-column__more"
+            : "custom-list-row-column__less"
+        }
+      >
+        {/* Отображение колонки с изображением */}
+        {isIcon && iconToShow}
+        {/* Отображение кастомной колонки */}
+        {props.getCustomColumComponent && props.getCustomColumComponent(data)}
+        {/* Отображение стандартной колонки */}
+        {!isIcon && !props.getCustomColumComponent && data.value}
+      </span>
+    </div>
+  );
 }
 
-export default CustomListRowColumn
+export default CustomListRowColumn;

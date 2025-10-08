@@ -1,86 +1,107 @@
-import React, { } from "react";
+import React from "react";
 import Scripts from "../../../shared/utils/clientScripts";
-import { selectRequestContext, } from "../../../stores/SelectRequestContext";
+import { selectRequestContext } from "../../../stores/SelectRequestContext";
 import Button from "../../../../UIKit/Button/Button";
 import { redirectSPA } from "../../../shared/utils/utils";
 
 interface SelectButtonProps {
-  showError(message: string): void
+  showError(message: string): void;
 }
 
 /** Кнопка Выбрать */
-export default function SelectButton({showError}: SelectButtonProps) {
+export default function SelectButton({ showError }: SelectButtonProps) {
   const { data, setValue } = selectRequestContext.useContext();
+
+  //Разделение составного Id
+  function parseSelectedId(id: string): {
+    contractorId: string;
+    policyId?: string;
+  } {
+    const [contractorId, policyId] = id.split("_");
+    return { contractorId, policyId };
+  }
 
   // Установить контрагента в договор
   const setTreatyContractor = async () => {
     const selectedContractorId = data.selectedItemsIds[0];
-    await Scripts.setContractInsured(selectedContractorId);
+    const { contractorId } = parseSelectedId(selectedContractorId);
+    await Scripts.setContractInsured(contractorId);
 
     const insurance_treaty_page_code = Scripts.getTreatyPageCode();
     redirectSPA(insurance_treaty_page_code);
-  }
+  };
 
   // Установить контрагента в фильтр
   const setFilterInsured = async () => {
     const selectedContractorId = data.selectedItemsIds[0];
+    const { contractorId } = parseSelectedId(selectedContractorId);
 
-    await Scripts.setFilterInsured(selectedContractorId);
+    await Scripts.setFilterInsured(contractorId);
     const select_task_page_code = Scripts.getSelectTaskPageCode();
     redirectSPA(select_task_page_code);
-  }
+  };
 
   function openRequest() {
     // Получение id обращения
     const url = new URL(window.location.href);
     const requestId = url.searchParams.get("request_id");
-    
+
     const mode = new URLSearchParams(window.location.search).get("mode");
     const request_page_path = Scripts.getRequestPageCode();
 
-    const redirectUrl = new URL(window.location.origin + "/" + request_page_path);
+    const redirectUrl = new URL(
+      window.location.origin + "/" + request_page_path
+    );
     if (mode) {
-      redirectUrl.searchParams.set("mode", mode)
+      redirectUrl.searchParams.set("mode", mode);
     } else {
-      if(requestId) redirectUrl.searchParams.set("request_id", requestId)
+      if (requestId) redirectUrl.searchParams.set("request_id", requestId);
     }
-    
-    redirectSPA(redirectUrl.toString())
+
+    redirectSPA(redirectUrl.toString());
   }
 
   // Установить застрахованного в обращение
   const setRequestInsured = async () => {
     const selectedContractorId = data.selectedItemsIds[0];
+    const { contractorId } = parseSelectedId(selectedContractorId);
 
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
-    if (fieldId) await Scripts.assignInsured(fieldId, selectedContractorId);
+    if (fieldId) await Scripts.assignInsured(fieldId, contractorId);
 
-    openRequest()
-  } 
+    openRequest();
+  };
 
   /** Валидация списка застрахованных */
-  async function validateInsuredList(selectedContractorsIds: string[]): Promise<string | undefined> {
+  async function validateInsuredList(
+    selectedContractorsIds: string[]
+  ): Promise<string | undefined> {
     // Вылидация по договорам
-    const contractValidation = await Scripts.validateInsuredListContracts(selectedContractorsIds);
-    if(!contractValidation)  return "У выбранных контрагентов должен быть общий договор"
+    const contractValidation = await Scripts.validateInsuredListContracts(
+      selectedContractorsIds
+    );
+    if (!contractValidation)
+      return "У выбранных контрагентов должен быть общий договор";
 
-    return undefined
+    return undefined;
   }
   // Установить список застрахованного в обращении
   const setRequestInsuredList = async () => {
-    const selectedContractorsIds = data.selectedItemsIds;
-
+    //const selectedContractorsIds = data.selectedItemsIds;
+    const contractorIds = data.selectedItemsIds.map(
+      (id) => parseSelectedId(id).contractorId
+    );
     // Валидация по договорам
-    const validationMessage = await validateInsuredList(selectedContractorsIds);
-    if(validationMessage) {
-      showError(validationMessage)
+    const validationMessage = await validateInsuredList(contractorIds);
+    if (validationMessage) {
+      showError(validationMessage);
       return;
     }
 
-    await Scripts.assignInsuredList(selectedContractorsIds);
+    await Scripts.assignInsuredList(contractorIds);
 
-    openRequest()
-  }
+    openRequest();
+  };
 
   // Нажатие на кнопку выбрать
   const handleSelectClick = async () => {
@@ -104,7 +125,12 @@ export default function SelectButton({showError}: SelectButtonProps) {
 
   return (
     <>
-      {Boolean(data.selectedItemsIds.length) && <Button title={"Выбрать" + `: ${data.selectedItemsIds.length}`} clickHandler={handleSelectClick} />}
+      {Boolean(data.selectedItemsIds.length) && (
+        <Button
+          title={"Выбрать" + `: ${data.selectedItemsIds.length}`}
+          clickHandler={handleSelectClick}
+        />
+      )}
     </>
   );
 }

@@ -77,7 +77,11 @@ function Header({
       </div>
       <div className="header__title">{title}</div>
       <div className="header__count">
-        Отобрано: <span>{elementsCount}</span>
+        {elementsCount > 0 && (
+          <>
+            Найдено: <span>{elementsCount}</span>
+          </>
+        )}
       </div>
       <div className="header__buttons">{children}</div>
     </div>

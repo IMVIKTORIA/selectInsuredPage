@@ -32,11 +32,24 @@ async function getAppeals(
   });
 
   const mockData: SelectRequestData = {
-    number: new ItemData({ value: "Иванов Иван Иванович", info: "test" }),
+    id: new ItemDataString("1234"),
+    isIntegration: new ItemData({
+      value: "Иванов Иван Иванович",
+      info: Math.random() < 0.5,
+    }),
+    numberPolicy: new ItemData({
+      value: "12345",
+      info: "test",
+      isLink: Math.random() < 0.5,
+    }),
+    number: new ItemData({
+      value: "Иванов Иван Иванович",
+      info: "test",
+    }),
     birthDate: new ItemDataString("06.12.2023"),
     startDate: new ItemDataString("01.01.2023"),
-    endDate: new ItemDataString("02.01.2023"),
-    numberPolicy: new ItemData({ value: "12345", info: "test" }),
+    endDate: { value: "10.10.1990", isValid: Math.random() < 0.5 },
+
     product: new ItemData({
       value:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae perferendis officiis veniam, rem, assumenda, veritatis praesentium nobis provident minima dolores voluptatem eveniet quibusdam suscipit distinctio harum. Facilis blanditiis mollitia inventore?",
@@ -257,9 +270,20 @@ async function OnInit(): Promise<void> {
 }
 
 /** Валидация списка контрагентов по договорам */
-async function validateInsuredListContracts(selectedContractorsIds:string[]) {
-  await randomDelay()
-  return false
+async function validateInsuredListContracts(selectedContractorsIds: string[]) {
+  await randomDelay();
+  return false;
+}
+/** Получить id договора по id полиса */
+async function getTreatyIdByPolicyId(
+  policyId: string
+): Promise<string | undefined> {
+  return "placehloder";
+}
+
+/** Установить идентификатор застрахованного для перехода на форму договора */
+async function getContracortId(policyId: string): Promise<string | undefined> {
+  return "contractor_id";
 }
 
 export default {
@@ -284,4 +308,6 @@ export default {
   OnInit,
 
   validateInsuredListContracts,
+  getTreatyIdByPolicyId,
+  getContracortId,
 };

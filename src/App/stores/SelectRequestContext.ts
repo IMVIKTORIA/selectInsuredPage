@@ -1,6 +1,12 @@
 import React from "react";
 import { initGlobalContext } from "./GlobalContext";
-import { AppFilter, DateFilter, IFiltersData, ListFilter, StringFilter } from "../../UIKit/Filters/FiltersTypes";
+import {
+  AppFilter,
+  DateFilter,
+  IFiltersData,
+  ListFilter,
+  StringFilter,
+} from "../../UIKit/Filters/FiltersTypes";
 
 /** Данные формы отбора обращения */
 export class SelectRequestData {
@@ -15,7 +21,7 @@ export class SelectRequestData {
   /** Идентификаторы выбранных элементов */
   selectedItemsIds: string[];
   /** Список сообщений с ошибками */
-  errorMessages: string[]
+  errorMessages: string[];
 
   constructor() {
     this.filters = new SelectRequestFilters();
@@ -95,17 +101,17 @@ export class SelectRequestFilters implements IFiltersData {
   contract: StringFilter;
 
   constructor() {
-    this.number = new StringFilter("number", "полное наименование");
-    this.birthDate = new DateFilter("birthDate", "дата рождения");
-    this.startDate = new DateFilter("startDate", "дата начала");
-    this.endDate = new DateFilter("endDate", "дата окончания");
-    this.gender = new ListFilter("gender", "пол");
-    this.numberPolicy = new StringFilter("numberPolicy", "номер полиса");
-    this.product = new StringFilter("product", "продукт");
-    this.telephone = new StringFilter("telephone", "телефон");
-    this.email = new StringFilter("email", "email");
-    this.insurer = new StringFilter("insurer", "страхователь");
-    this.contract = new StringFilter("contract", "договор");
+    this.number = new StringFilter("number", "ФИО");
+    this.birthDate = new DateFilter("birthDate", "Дата рождения");
+    this.startDate = new DateFilter("startDate", "Дата начала");
+    this.endDate = new DateFilter("endDate", "Дата окончания");
+    this.gender = new ListFilter("gender", "Пол");
+    this.numberPolicy = new StringFilter("numberPolicy", "Полис");
+    this.product = new StringFilter("product", "Продукт");
+    this.telephone = new StringFilter("telephone", "Телефон");
+    this.email = new StringFilter("email", "Email");
+    this.insurer = new StringFilter("insurer", "Страхователь");
+    this.contract = new StringFilter("contract", "Договор");
   }
 
   reset() {
@@ -123,4 +129,6 @@ export class SelectRequestFilters implements IFiltersData {
   }
 }
 
-export const selectRequestContext = initGlobalContext<SelectRequestData>(new SelectRequestData());
+export const selectRequestContext = initGlobalContext<SelectRequestData>(
+  new SelectRequestData()
+);
