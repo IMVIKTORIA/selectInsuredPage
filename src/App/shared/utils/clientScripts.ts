@@ -286,6 +286,11 @@ async function getContracortId(policyId: string): Promise<string | undefined> {
   return "contractor_id";
 }
 
+/** Получение ссылки для перехода на страницу входящего звонка */
+function getIcomingCallLink(): string {
+  return Context.data.contractor_page_path;
+}
+
 export default {
   getAppeals,
   getRequestsCount,
@@ -300,6 +305,7 @@ export default {
   getSelectTaskPageCode,
   getRequestPageCode,
   getContractorPageCode,
+  getIcomingCallLink,
 
   setFilterInsured,
   setContractInsured,

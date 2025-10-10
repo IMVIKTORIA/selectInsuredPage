@@ -6,10 +6,14 @@ import { redirectSPA } from "../../../shared/utils/utils";
 
 interface SelectButtonProps {
   showError(message: string): void;
+  phoneContractor?: string;
 }
 
 /** Кнопка Выбрать */
-export default function SelectButton({ showError }: SelectButtonProps) {
+export default function SelectButton({
+  showError,
+  phoneContractor,
+}: SelectButtonProps) {
   const { data, setValue } = selectRequestContext.useContext();
 
   //Разделение составного Id
@@ -103,6 +107,20 @@ export default function SelectButton({ showError }: SelectButtonProps) {
     openRequest();
   };
 
+  //Выбрать застрахованного для формы входящего звонка
+  const getInsuredIncomigCall = async () => {
+    const selectedInsuredrId = data.selectedItemsIds[0];
+    const { contractorId, policyId } = parseSelectedId(selectedInsuredrId);
+    // Получить телефон
+    const phone = phoneContractor || undefined;
+
+    const link = Scripts.getIcomingCallLink();
+    const redirectUrl = new URL(window.location.origin + "/" + link);
+    if (phone) redirectUrl.searchParams.set("phone", phone);
+    if (contractorId) redirectUrl.searchParams.set("insuredId", contractorId);
+    if (policyId) redirectUrl.searchParams.set("policyId", policyId);
+    redirectSPA(redirectUrl.toString());
+  };
   // Нажатие на кнопку выбрать
   const handleSelectClick = async () => {
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
@@ -119,6 +137,9 @@ export default function SelectButton({ showError }: SelectButtonProps) {
         break;
       case "medpult-insured-fullname-initial":
         await setRequestInsured();
+        break;
+      case "select-call-insured":
+        await getInsuredIncomigCall();
         break;
     }
   };

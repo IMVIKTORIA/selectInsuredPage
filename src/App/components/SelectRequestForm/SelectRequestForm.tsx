@@ -29,7 +29,7 @@ export default function SelectRequestForm() {
     try {
       const draftData: SelectRequestData | undefined = getDataFromDraft();
       if (draftData) {
-        for(const key of Object.keys(draftData.filters)) {
+        for (const key of Object.keys(draftData.filters)) {
           const resetBuffer = filtersData.filters[key].reset;
           filtersData.filters[key] = draftData.filters[key];
           filtersData.filters[key].reset = resetBuffer;
@@ -44,6 +44,7 @@ export default function SelectRequestForm() {
 
   const [isMultipleSelect, setIsMultipleSelect] = useState<boolean>(false);
   const [isSelectable, setIsSelectable] = useState<boolean>(false);
+  const [phoneContractor, setPhoneContractor] = useState<string | undefined>();
 
   // Инициализация с параметрами
   const initializeWithParams = (filtersData: SelectRequestData) => {
@@ -52,6 +53,7 @@ export default function SelectRequestForm() {
     const fullname = new URLSearchParams(window.location.search).get(
       "fullname"
     );
+    const phone = new URLSearchParams(window.location.search).get("phone");
 
     // Множественный выбор
     const selectMultiple = new URLSearchParams(window.location.search).get(
@@ -66,6 +68,11 @@ export default function SelectRequestForm() {
       if (fullname) {
         filtersData.filters.number.value = fullname;
         filtersData.filterStates.number = true;
+      }
+      if (phone) {
+        filtersData.filters.telephone.value = `${phone.trim()}`;
+        filtersData.filterStates.telephone = true;
+        setPhoneContractor(phone.trim());
       }
     }
   };
@@ -118,7 +125,7 @@ export default function SelectRequestForm() {
     handleResizeWrapper();
   };
 
-  const [messages, setMessages] = useState<string[]>([])
+  const [messages, setMessages] = useState<string[]>([]);
 
   function showError(message: string) {
     setMessages([...messages, message]);
@@ -126,7 +133,7 @@ export default function SelectRequestForm() {
 
   return (
     <selectRequestContext.Provider value={{ data, setValue }}>
-      <PopupsContainer messages={messages} setMessages={setMessages}/>
+      <PopupsContainer messages={messages} setMessages={setMessages} />
       <div className="select-request-form">
         {isInitializing && (
           <div className="select-request-form__loader">
@@ -141,7 +148,10 @@ export default function SelectRequestForm() {
                 elementsCount={data.elementsCount}
                 title="Форма отбора застрахованных"
               >
-                <SelectButton showError={showError}/>
+                <SelectButton
+                  showError={showError}
+                  phoneContractor={phoneContractor}
+                />
               </Header>
             </div>
             <div
