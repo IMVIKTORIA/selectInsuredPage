@@ -2,7 +2,7 @@
   user-select: none;
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
 
   &__name {
@@ -18,8 +18,9 @@
     letter-spacing: 0.0025em;
     text-transform: uppercase;
     color: #959599;
-    width: 10px;
-    flex: 1;
+    //width: 10px;
+    width: auto;
+    //flex: 1;
   }
 
   &__button {

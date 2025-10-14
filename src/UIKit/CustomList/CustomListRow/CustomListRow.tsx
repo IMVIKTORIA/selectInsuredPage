@@ -79,21 +79,30 @@ function CustomListRow<ItemType = any>(props: ListRowProps<ItemType>) {
   const rowStyles: React.CSSProperties = {};
   if (!isSelectable) rowStyles.paddingLeft = `20px`;
 
+  const handleRowClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isSelectable) return;
+    toggleChecked();
+  };
+
   return (
     <>
       {!isShowDetails && (
         <div
           className={getRowClassname()}
-          onClick={setOpenRowIndex}
+          //onClick={setOpenRowIndex}
+          onClick={handleRowClick}
           style={rowStyles}
         >
           {/* Селектор */}
           {isSelectable && (
-            <CustomListSelector
-              onClickSelector={toggleChecked}
-              isMultiple={isMultipleSelect}
-              isChecked={isChecked}
-            />
+            <div onClick={(e) => e.stopPropagation()}>
+              <CustomListSelector
+                onClickSelector={toggleChecked}
+                isMultiple={isMultipleSelect}
+                isChecked={isChecked}
+              />
+            </div>
           )}
           {/* Колонки с данными */}
           {columnsSettings.map((settings) => {

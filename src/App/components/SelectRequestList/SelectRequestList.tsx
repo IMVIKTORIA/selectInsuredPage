@@ -91,8 +91,9 @@ export default function SelectRequestList({
     localStorage.setItem("medpult-treaty-insured-id-draft", contractorId);
     localStorage.setItem("medpult-treaty-id", treatyId);
     const link = Scripts.getTreatyPageCode();
-
-    redirectSPA(link);
+    const redirectUrl = new URL(window.location.origin + "/" + link);
+    //redirectSPA(link);
+    window.open(redirectUrl.toString(), "_blank");
   };
 
   /** Колонки списка */
