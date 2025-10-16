@@ -70,8 +70,8 @@ export default function SelectRequestForm() {
         filtersData.filterStates.number = true;
       }
       if (phone) {
-        filtersData.filters.telephone.value = `${phone.trim()}`;
-        filtersData.filterStates.telephone = true;
+        //filtersData.filters.telephone.value = `${phone.trim()}`;
+        //filtersData.filterStates.telephone = true;
         setPhoneContractor(phone.trim());
       }
     }
