@@ -147,8 +147,18 @@ function CustomList<SearchDataType = any, ItemType = any>(
     setSearchHandler(() => {
       setIsSearchPerformed(true);
       reloadData();
+      setCheckedRowsIds([]);
+      if (setSelectedItems) setSelectedItems([]);
     });
   }, [searchData, sortData]);
+  // useEffect(() => {
+  //   if (!setSearchHandler) return;
+
+  //   setSearchHandler(() => {
+  //     setIsSearchPerformed(true);
+  //     reloadData();
+  //   });
+  // }, [searchData, sortData]);
 
   /** Обновление оглавления при изменении сортировки */
   useEffect(() => {

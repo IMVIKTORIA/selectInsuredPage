@@ -45,7 +45,7 @@ export default function SelectButton({
     redirectSPA(select_task_page_code);
   };
 
-  function openRequest() {
+  function openRequest(policyId?: string) {
     // Получение id обращения
     const url = new URL(window.location.href);
     const requestId = url.searchParams.get("request_id");
@@ -61,6 +61,7 @@ export default function SelectButton({
     } else {
       if (requestId) redirectUrl.searchParams.set("request_id", requestId);
     }
+    if (policyId) redirectUrl.searchParams.set("policyId", policyId);
 
     redirectSPA(redirectUrl.toString());
   }
@@ -68,12 +69,12 @@ export default function SelectButton({
   // Установить застрахованного в обращение
   const setRequestInsured = async () => {
     const selectedContractorId = data.selectedItemsIds[0];
-    const { contractorId } = parseSelectedId(selectedContractorId);
+    const { contractorId, policyId } = parseSelectedId(selectedContractorId);
 
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
     if (fieldId) await Scripts.assignInsured(fieldId, contractorId);
 
-    openRequest();
+    openRequest(policyId);
   };
 
   /** Валидация списка застрахованных */
