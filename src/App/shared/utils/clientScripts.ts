@@ -291,6 +291,11 @@ function getIcomingCallLink(): string {
   return Context.data.contractor_page_path;
 }
 
+/** Получение ссылки для перехода на страницу входящего письма */
+function getIcomingEmailLink(): string {
+  return Context.data.contractor_page_path;
+}
+
 export default {
   getAppeals,
   getRequestsCount,
@@ -306,6 +311,7 @@ export default {
   getRequestPageCode,
   getContractorPageCode,
   getIcomingCallLink,
+  getIcomingEmailLink,
 
   setFilterInsured,
   setContractInsured,

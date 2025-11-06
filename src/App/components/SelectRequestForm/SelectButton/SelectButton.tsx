@@ -7,12 +7,14 @@ import { redirectSPA } from "../../../shared/utils/utils";
 interface SelectButtonProps {
   showError(message: string): void;
   phoneContractor?: string;
+  emailContractor?: string;
 }
 
 /** Кнопка Выбрать */
 export default function SelectButton({
   showError,
   phoneContractor,
+  emailContractor,
 }: SelectButtonProps) {
   const { data, setValue } = selectRequestContext.useContext();
 
@@ -122,6 +124,21 @@ export default function SelectButton({
     if (policyId) redirectUrl.searchParams.set("policyId", policyId);
     redirectSPA(redirectUrl.toString());
   };
+
+  //Выбрать застрахованного для формы входящего письма
+  const getInsuredIncomigEmail = async () => {
+    const selectedInsuredrId = data.selectedItemsIds[0];
+    const { contractorId, policyId } = parseSelectedId(selectedInsuredrId);
+    // Получить email
+    const email = emailContractor || undefined;
+
+    const link = Scripts.getIcomingEmailLink();
+    const redirectUrl = new URL(window.location.origin + "/" + link);
+    if (email) redirectUrl.searchParams.set("email", email);
+    if (contractorId) redirectUrl.searchParams.set("insuredId", contractorId);
+    if (policyId) redirectUrl.searchParams.set("policyId", policyId);
+    redirectSPA(redirectUrl.toString());
+  };
   // Нажатие на кнопку выбрать
   const handleSelectClick = async () => {
     const fieldId = new URLSearchParams(window.location.search).get("field_id");
@@ -141,6 +158,9 @@ export default function SelectButton({
         break;
       case "select-call-insured":
         await getInsuredIncomigCall();
+        break;
+      case "select-email-insured":
+        await getInsuredIncomigEmail();
         break;
     }
   };
