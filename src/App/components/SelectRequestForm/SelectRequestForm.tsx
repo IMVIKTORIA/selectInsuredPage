@@ -46,6 +46,7 @@ export default function SelectRequestForm() {
   const [isSelectable, setIsSelectable] = useState<boolean>(false);
   const [phoneContractor, setPhoneContractor] = useState<string | undefined>();
   const [emailContractor, setEmailContractor] = useState<string | undefined>();
+  const [interactionId, setInteractionId] = useState<string | undefined>();
 
   // Инициализация с параметрами
   const initializeWithParams = (filtersData: SelectRequestData) => {
@@ -56,6 +57,9 @@ export default function SelectRequestForm() {
     );
     const phone = new URLSearchParams(window.location.search).get("phone");
     const email = new URLSearchParams(window.location.search).get("email");
+    const intId = new URLSearchParams(window.location.search).get(
+      "interactionId"
+    );
 
     // Множественный выбор
     const selectMultiple = new URLSearchParams(window.location.search).get(
@@ -80,6 +84,10 @@ export default function SelectRequestForm() {
         //filtersData.filters.telephone.value = `${phone.trim()}`;
         //filtersData.filterStates.telephone = true;
         setEmailContractor(email.trim());
+      }
+
+      if (intId) {
+        setInteractionId(intId.trim());
       }
     }
   };
@@ -159,6 +167,7 @@ export default function SelectRequestForm() {
                   showError={showError}
                   phoneContractor={phoneContractor}
                   emailContractor={emailContractor}
+                  interactionId={interactionId}
                 />
               </Header>
             </div>

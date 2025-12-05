@@ -8,6 +8,7 @@ interface SelectButtonProps {
   showError(message: string): void;
   phoneContractor?: string;
   emailContractor?: string;
+  interactionId?: string;
 }
 
 /** Кнопка Выбрать */
@@ -15,6 +16,7 @@ export default function SelectButton({
   showError,
   phoneContractor,
   emailContractor,
+  interactionId,
 }: SelectButtonProps) {
   const { data, setValue } = selectRequestContext.useContext();
 
@@ -131,10 +133,13 @@ export default function SelectButton({
     const { contractorId, policyId } = parseSelectedId(selectedInsuredrId);
     // Получить email
     const email = emailContractor || undefined;
+    //Получить id взаимодействия
+    const intId = interactionId || undefined;
 
     const link = Scripts.getIcomingEmailLink();
     const redirectUrl = new URL(window.location.origin + "/" + link);
     if (email) redirectUrl.searchParams.set("email", email);
+    if (intId) redirectUrl.searchParams.set("interactionId", intId);
     if (contractorId) redirectUrl.searchParams.set("insuredId", contractorId);
     if (policyId) redirectUrl.searchParams.set("policyId", policyId);
     redirectSPA(redirectUrl.toString());
